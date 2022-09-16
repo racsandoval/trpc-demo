@@ -1,11 +1,16 @@
 import { Service } from 'typedi';
-import { UserDatasource } from '../../data/source/user.datasource';
+import { Datasource } from '../../data/datasource';
+import { UserDatasource } from '../../data/model/datasource.model';
 
 @Service()
 export class GetUsersUseCase {
-  constructor(private readonly datasource: UserDatasource) {}
+  private userDatasource: UserDatasource;
+
+  constructor(private readonly datasource: Datasource) {
+    this.userDatasource = this.datasource.getUserDatasource();
+  }
 
   async exec() {
-    return this.datasource.getUsers();
+    return this.userDatasource.getUsers();
   }
 }

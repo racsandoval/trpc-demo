@@ -1,18 +1,23 @@
 import { Service } from 'typedi';
-import { UserDatasource } from '../../data/source/user.datasource';
+import { Datasource } from '../../data/datasource';
+import { UserDatasource } from '../../data/model/datasource.model';
 import { UserInputModel, UserModel } from '../model';
 
 @Service()
 export class CreateUserUseCase {
-  constructor(private readonly datasource: UserDatasource) {}
+  private userDatasource: UserDatasource;
+
+  constructor(private readonly datasource: Datasource) {
+    this.userDatasource = this.datasource.getUserDatasource();
+  }
 
   async exec(input: UserInputModel): Promise<UserModel> {
-    const user = await this.datasource.findUserByEmail(input.email);
+    const user = await this.userDatasource.findUserByEmail(input.email);
 
     if (user) {
       throw new Error('User already exists');
     }
 
-    return this.datasource.createUser(input);
+    return this.userDatasource.createUser(input);
   }
 }

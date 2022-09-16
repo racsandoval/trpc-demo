@@ -1,10 +1,10 @@
-import { QueryResult } from 'neo4j-driver';
 import { Service } from 'typedi';
-import { UserInputModel, UserModel } from '../../domain/model';
+import { UserInputModel, UserModel } from '../../../domain/model';
+import { UserDatasource } from '../../model/datasource.model';
 import { DriverService } from '../driver.service';
 
 @Service()
-export class UserDatasource {
+export class Neo4jUserDatasource implements UserDatasource {
   constructor(private readonly driver: DriverService) {}
 
   async getUsers(): Promise<UserModel[]> {
